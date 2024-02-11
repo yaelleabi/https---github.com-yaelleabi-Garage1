@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Messages{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <h1>Messages reçus ({{ contacts|length }})</h1>
+    {% if contacts|length == 0 %}
+    <div class="alert alert-info">Aucun message reçu</div>
+    {% endif %}
+    <div class="accordion mt-4" id="accordion">
+        {% for contact in contacts %}
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#collapse{{ contact.id }}" aria-expanded="true"
+                    aria-controls="collapse{{ contact.id }}">
+                    <span>
+                        {{ contact.submittedAt|date('d/m/Y H:i')}}
+                    </span>
+                    <span style="margin-left: 1.5rem;">
+                        {{ contact.subject|u.truncate(50, '...') }}
+                    </span>
+                </button>
+            </h2>
+            <div id="collapse{{contact.id}}" class="accordion-collapse collapse" data-bs-parent="#accordion">
+                <div class="accordion-body">
+                    <div class="mb-1"><span class="fw-bold">Sujet :</span> {{ contact.subject }}</div>
+                    <div class="mb-1"><span class="fw-bold">Nom :</span> {{ contact.firstname }} {{ contact.lastname|upper }}</div>
+                    <div class="mb-1"><span class="fw-bold">Email :</span> {{ contact.mail }}</div>
+                    <div class="mb-1"><span class="fw-bold">Téléphone :</span> {{ contact.phone }}</div>
+                    <div class="mb-1"><span class="fw-bold">Message :</span><br/>{{ contact.description }}</div>
+                    <div class="mt-3">
+                        <a href="{{ path('app_contact_delete', {'id': contact.id}) }}" class="btn btn-main text-danger">
+                            Supprimer
+                            <i class="material-icons">delete</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

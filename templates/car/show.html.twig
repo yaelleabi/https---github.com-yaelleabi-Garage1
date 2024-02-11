@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{car.brand}} - {{car.model}}{% endblock %}
+
+{% block body %}
+
+<div class="container mt-4">
+    <h1>{{car.brand}} - {{car.model}}</h1>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <img src="{{ asset('images/cars/' ~ car.imageName) }}" alt="{{car.brand}} - {{car.model}}"
+                class="img-fluid rounded-5">
+            <div class="mt-3 text-center">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                <a href="{{ path('app_car_edit', {'id': car.id}) }}" class="btn btn-sm btn-main">
+                    Modifier
+                    <i class="material-icons" style="font-size: 1rem;">edit</i>
+                </a>
+                <a href="{{ path('app_car_delete', {'id': car.id}) }}" class="btn btn-sm btn-main text-danger">
+                    Supprimer
+                    <i class="material-icons" style="font-size: 1rem;">delete</i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            {% if car.description %}
+            <h2 class="mt-3">Description</h2>
+            <p>{{car.description}}</p>
+            {% endif %}
+            <h2 class="mt-3">Caractéristiques</h2>
+            <ul>
+                <li>Année : {{car.year}}</li>
+                <li>Kilométrage : {{car.km}}</li>
+                <li>Prix : {{car.price}}€</li>
+            </ul>
+        </div>
+    </div>
+    <div class="mt-4 card card-body">
+        <h2 class="mt-3">Vous êtes intéressé ?</h2>
+        <p>
+            Vous pouvez nous contacter par téléphone au <a href="tel:0560338166">05 60 33 81 66</a> ou en remplissant
+            le formulaire ci-dessous.
+        </p>
+        {{render(controller('App\\Controller\\ContactController::formWithPrefilledSubject', {
+        'subject': 'Demande d\'information sur la voiture ' ~ car.brand ~ ' ' ~ car.model ~ ' (' ~ car.id ~ ')'
+        }))}}
+    </div>
+</div>
+
+{% endblock %}

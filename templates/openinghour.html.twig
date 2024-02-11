@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Horaires d'ouverture{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-end">
+        <h1 class="text-center mt-4">Modifier les horaires d'ouverture</h1>
+        <div class="col-md-6 mt-5 d-flex align-items-center">
+            <img src="/openinghours.png" alt="Horaires d'ouverture" class="img-fluid rounded-4 mx-auto">
+        </div>
+        <div class="col-md-6 mt-5">
+            <div class="card card-body bg-body-tertiary border-0 p-4 shadow-sm">
+                <form action="{{ path('app_opening_hour') }}" method="post">
+                    {% for hour in openingHours %}
+                    <div class="mb-3">
+                        <label for="day" class="form-label">{{ hour.day }}</label>
+                        <input type="text" class="form-control" id="{{hour.id}}" name="{{hour.id}}" value="{{ hour.value }}">
+                    </div>
+                    {% endfor %}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button type="submit" class="btn btn-main mt-3">Enregistrer</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

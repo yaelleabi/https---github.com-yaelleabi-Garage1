@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier une voiture{% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-5">
+            <div class="card card-body bg-body-tertiary border-0 p-4">
+                <h1 class="text-center mb-4">Modifier une voiture</h1>
+                {{ form(form) }}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('form img').forEach(img => img.className = 'img-fluid rounded-4');
+</script>
+{% endblock %}

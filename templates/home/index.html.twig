@@ -1,0 +1,151 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Garage V.Parrot{% endblock %}
+
+{% block body %}
+<style>
+    .hero-section {
+        background: url('/voiture/garage.png') no-repeat center center;
+        background-size: cover;
+        position: relative;
+    }
+
+    .hero-section::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 1rem;
+        z-index: 0;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+</style>
+
+<div class="container">
+
+    <div class="p-5 my-4 rounded-4 container-fluid hero-section p-5">
+        <div class="container hero-content py-5">
+            <img src="/logo.png" alt="Logo" width="200" height="150">
+            <h1 class="display-5 pt-3 fw-bold text-white">Bienvenue au Garage V. Parrot</h1>
+            <p class="col-md-8 fs-4 text-white fw-bold">Bienvenue au Garage V. Parrot, où la passion de l'automobile et
+                l'expertise se
+                rencontrent. Fondé en 2021 à Toulouse par Vincent Parrot, nous sommes dédiés à offrir une expérience
+                exceptionnelle pour vous et votre véhicule.
+            </p>
+            <a class="btn btn-danger btn-lg fw-bold" href="{{ path('app_contact') }}">Prendre contact</a>
+        </div>
+    </div>
+
+    <h2 class="mb-3">Services</h2>
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {% for service in services %}
+        <div class="col">
+            <div class="card border-0 bg-body-tertiary py-2 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title text-sub">{{ service.name }}</h5>
+                    <p class="card-text">{{ service.description }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h2 class="mt-5 mb-3">Laissez nous un avis</h2>
+    {% if reviews|length != 0 %}
+    <div class="mb-4">
+        <div class="fst-italic mb-1">
+            Découvrez les avis de nos clients !
+        </div>
+        <div class="row flex-row flex-nowrap" style="overflow-x: auto;">
+            {% for review in reviews %}
+            <div class="col">
+                <div class="card py-2 shadow-sm bg-body-tertiary border-warning" 
+                style="border-style: dashed; width: 27rem;">
+                    <div class="card-body">
+                        {% for i in 1..review.note %}
+                        <i class="material-icons text-warning">star</i>
+                        {% endfor %}
+                        {% for i in 1..(5 - review.note) %}
+                        <i class="material-icons text-warning">star_border</i>
+                        {% endfor %}
+                        <p class="card-text mt-2">{{ review.description|u.truncate(100, '...') }}</p>
+                        <p class="card-text"><small class="text-muted">Posté par {{ review.name }} le {{
+                                review.submittedAt|date('Y-m-d') }}</small></p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    <div class="card border-0 bg-body-tertiary py-2 shadow-sm">
+        <div class="card-body">
+            <div class="fw-bold mb-3">
+                Vous avez déjà fait appel à nos services ? Laissez nous un avis ! <br />
+                Votre avis nous permettra de nous améliorer et de vous offrir un service de qualité.
+            </div>
+
+            {{ render(controller('App\\Controller\\ReviewAddController::simplifiedForm')) }}
+        </div>
+    </div>
+
+    <h2 class="mt-5 mb-3">Véhicules d'occasion</h2>
+    <p class="mb-3 fw-light">
+        Chez Garage V. Parrot, découvrez une sélection exceptionnelle de véhicules d'occasion, considérée comme l'une
+        des meilleures sur le marché. Notre équipe dévouée travaille sans relâche pour vous proposer des voitures de
+        qualité supérieure, accompagnées d'une garantie unique en son genre. Nous offrons un vaste assortiment d'options
+        parmi nos annonces de véhicules d'occasion, afin de répondre à tous les goûts et besoins. De plus, pour
+        faciliter votre transition vers votre nouvelle voiture, nous proposons un service d'évaluation pour la reprise
+        de votre véhicule actuel, garantissant un processus simple et transparent. Chez Garage V. Parrot, votre
+        satisfaction est notre priorité, et nous nous engageons à vous fournir une expérience d'achat de véhicule
+        d'occasion incomparable.
+    </p>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for car in cars %}
+        <div class="col">
+            <div class="card border-0 rounded-5 bg-white text-bg-dark">
+                <img src="{{ asset('images/cars/' ~ car.imageName) }}" class="card-img shadow rounded-5"
+                    style="height: 300px; object-fit: cover; filter: brightness(54%)"
+                    alt="{{ car.brand }} {{ car.model }}">
+                <div class="card-img-overlay">
+                    <div class="row card-text fw-bolder">
+                        <h5 class="col card-title fw-bolder">{{ car.brand }} {{ car.model }}</h5>
+                        <div class="col text-end">
+                            <a href="{{ path('app_car_show', {'id': car.id}) }}" class="btn btn-sm btn-light">
+                                <i class="material-icons" style="font-size: 1rem;">visibility</i>
+                            </a>
+                        </div>
+                    </div>
+                    <div>
+                        Prix : {{ car.price }} €
+                        <br>
+                        Année : {{ car.year }}
+                        <br>
+                        Kilométrage : {{ car.km }} km
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="gap-2 d-grid">
+        <a href="{{ path('app_car_list') }}" class="btn btn-main btn-lg fw-bold mt-3">
+            Voir tous les véhicules d'occasion
+        </a>
+    </div>
+
+    <h2 class="mt-5 mb-3">Contactez nous</h2>
+    <div class="card border-0 bg-body-tertiary py-2 shadow-sm">
+        <div class="card-body">
+            {{ render(controller('App\\Controller\\ContactController::simplifiedForm')) }}
+        </div>
+    </div>
+</div>
+{% endblock %}

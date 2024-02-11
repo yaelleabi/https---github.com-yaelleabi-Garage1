@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Se connecter{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6 mt-5">
+            <div class="card card-body bg-body-tertiary border-0 p-4">
+                <div class="text-center mb-4">
+                    <img src="/logo.png" alt="Logo" width="100" height="80">
+                </div>
+                <h1 class="text-center mb-4">Connexion interne</h1>
+                {% if error %}
+                <div class="alert alert-danger">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+                {% endif %}
+                <form action="{{ path('app_login') }}" method="post">
+                    <div class="mb-3">
+                        <label for="registration_form_email" class="form-label required">
+                            Adresse email</label>
+                        <input type="email" id="registration_form_email" name="_username" required="required"
+                            class="form-control" value="{{ last_username }}" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label required">
+                            Mot de passe</label>
+                        <input type="password" id="password" name="_password" required="required"
+                            class="form-control" />
+                    </div>
+
+                    {# If you want to control the URL the user is redirected to on success
+                    <input type="hidden" name="_target_path" value="/account"> #}
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button type="submit" class="btn btn-main">Se connecter</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,50 @@
+<style>
+    .star {
+        font-size: 2rem;
+        cursor: pointer;
+    }
+
+    .star:hover {
+        color: var(--bs-warning);
+    }
+
+    .active {
+        color: var(--bs-warning);
+    }
+</style>
+
+<script>
+    function setRating(rating) {
+        document.getElementById('review_note').value = rating;
+        for (let i = 1; i <= 5; i++) {
+            document.getElementById('star' + i).classList.remove('active');
+        }
+        for (let i = 1; i <= rating; i++) {
+            document.getElementById('star' + i).classList.add('active');
+        }
+    }
+</script>
+
+
+{{ form_start(reviewForm) }}
+{{ form_errors(reviewForm) }}
+
+{{ form_row(reviewForm.name) }}
+{{ form_row(reviewForm.description) }}
+
+<div class="mb-3">
+    <label for="note">Note</label>
+
+
+    <div>
+        <i class="material-icons star" onclick="setRating(1)" id="star1">star</i>
+        <i class="material-icons star" onclick="setRating(2)" id="star2">star</i>
+        <i class="material-icons star" onclick="setRating(3)" id="star3">star</i>
+        <i class="material-icons star" onclick="setRating(4)" id="star4">star</i>
+        <i class="material-icons star" onclick="setRating(5)" id="star5">star</i>
+    </div>
+</div>
+
+{{ form_row(reviewForm.button) }}
+{{ form_rest(reviewForm) }}
+{{ form_end(reviewForm) }}

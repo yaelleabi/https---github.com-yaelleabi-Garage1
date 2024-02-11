@@ -1,0 +1,23 @@
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <div class="toast-container top-0 end-0 p-3">
+        {% for label, messages in app.flashes %}
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+            <div class="toast-header">
+                {% if label == 'success' %}
+                <i class="material-icons text-success">check_circle</i>
+                {% elseif label == 'error' %}
+                <i class="material-icons text-danger">error</i>
+                {% else %}
+                <i class="material-icons text-warning">warning</i>
+                {% endif %}
+                <button type="button" class="btn-close text-end" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

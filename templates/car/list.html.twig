@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Véhicules d'occasion{% endblock %}
+
+{% block body %}
+
+<div class="container mt-3">
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <h1>Nos véhicules d'occasion</h1>
+        </div>
+        {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <div class="col-md-6 text-end">
+            <a href="{{ path('app_car_add') }}" class="btn btn-main">
+                Ajouter
+                <i class="material-icons">add_circle</i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="filters" class="mb-4">
+        <form class="row" method="get" action="{{ path('app_car_list') }}">
+            <div class="col-md-3">
+                <label for="price">Prix</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="number" class="form-control" name="priceInf" placeholder="Min"
+                            value="{{ app.request.query.get('priceInf') }}">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="priceSup" placeholder="Max"
+                            value="{{ app.request.query.get('priceSup') }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="km">Kilométrage</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="number" class="form-control" name="kmInf" placeholder="Min"
+                            value="{{ app.request.query.get('kmInf') }}">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="kmSup" placeholder="Max"
+                            value="{{ app.request.query.get('kmSup') }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label for="year">Année</label>
+                <div class="row">
+                    <div class="col">
+                        <input type="number" class="form-control" name="yearInf" placeholder="Min"
+                            value="{{ app.request.query.get('yearInf') }}">
+                    </div>
+                    <div class="col">
+                        <input type="number" class="form-control" name="yearSup" placeholder="Max"
+                            value="{{ app.request.query.get('yearSup') }}">
+                    </div>
+                </div>
+            </div>
+            <!-- submit -->
+            <div class="col-md-3 mt-4">
+                <a href="{{ path('app_car_list') }}" class="btn btn-sm btn-outline-dark rounded-2"
+                    style='border-radius: var(--bs-border-radius)!important'>
+                    Réinitialiser
+                    <i class="material-icons">refresh</i>
+                </a>
+                &nbsp;
+                <button type="submit" class="btn btn-sm btn-dark"
+                    style='border-radius: var(--bs-border-radius)!important'>
+                    Filtrer
+                    <i class="material-icons">filter_list</i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    {% if cars is empty %}
+    <div class="alert alert-warning rounded-4" role="alert">
+        Aucun véhicule ne correspond à vos critères.
+    </div>
+    {% endif %}
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for car in cars %}
+        <div class="col">
+            <div class="card">
+                <img src="{{ asset('images/cars/' ~ car.imageName) }}" class="card-img-top"
+                    alt="{{ car.brand }} {{ car.model }}">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <h5 class="card-title">{{ car.brand }} {{ car.model }}</h5>
+                        </div>
+                        <div class="col text-end">
+                            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                            <a href="{{ path('app_car_edit', {'id': car.id}) }}" class="btn btn-sm btn-main">
+                                <i class="material-icons" style="font-size: 1rem;">edit</i>
+                            </a>
+                            <a href="{{ path('app_car_delete', {'id': car.id}) }}" class="btn btn-sm btn-main">
+                                <i class="material-icons text-danger" style="font-size: 1rem;">delete</i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <p class="card-text">
+                        Prix : {{ car.price }}€
+                        <br>
+                        Année : {{ car.year }}
+                        <br>
+                        Kilométrage : {{ car.km }} km
+                    </p>
+                    <div class="gap-2 d-grid">
+                        <a href="{{ path('app_car_show', {'id': car.id}) }}" class="btn btn-main">
+                            En savoir plus <i class="material-icons">visibility</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
